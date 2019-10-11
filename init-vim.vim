@@ -37,13 +37,17 @@ set pastetoggle=<F9>
 " colorscheme. {{{
 syntax enable
 set background=dark
-if &term == "screen"
-    set t_Co=256
-    " colo molokai
-    colo solarized
-else
-    set termguicolors
+if g:os_windows
     colo solarized8
+elseif g:os_unix
+		if &term == "screen"
+		set t_Co=256
+		" colo molokai
+		colo solarized
+	else
+		set termguicolors
+		colo solarized8
+	endif
 endif "}}}
 
 

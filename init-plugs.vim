@@ -68,7 +68,6 @@ Plug 'ervandew/supertab'
 " snippets
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
-Plug 'justmao945/vim-clang'
 "------ snipmate dependencies -------
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -92,6 +91,10 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'sjl/gundo.vim'
 Plug 'godlygeek/tabular'
 Plug 'nathanaelkane/vim-indent-guides'
+
+" tcomment_vim是快速开关注释的插件，
+" 也就是可以快速注释\反注释掉一段，一行，n行
+"Plug 'tomtom/tcomment_vim'
 
 "--------------
 " IDE features
@@ -189,6 +192,10 @@ Plug 'plasticboy/vim-markdown'
 
 "------- Ruby --------
 " Plug 'tpope/vim-endwise'
+
+
+"------- C & C++ --------
+Plug 'justmao945/vim-clang'
 
 "------- Go ----------
 "Plug 'fatih/vim-go'

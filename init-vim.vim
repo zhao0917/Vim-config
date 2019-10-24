@@ -21,8 +21,8 @@ if has('gui_running')
     set go=aAce  " remove toolbar
     "set transparency=30
     ""set guifont=Monaco:h12:cANSI
-    set guifont=Consolas:h13:cANSI
-    set guifontwide=YaHei_Mono:h13
+    set guifont=Consolas:h14:cANSI
+    set guifontwide=YaHei_Mono:h14
     set showtabline=2
     set columns=140
     set lines=40

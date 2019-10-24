@@ -156,7 +156,7 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 "}}}
 
 " ---------- easymotion ---------- {{{
-if My_Is_Plugin_load('vim-esaymotion')
+if My_Is_Plugin_load('vim-easymotion')
     let g:EasyMotion_do_mapping = 0 " Disable default mappings
     " <Leader>f{char} to move to {char}
     map  <Leader>f <Plug>(easymotion-bd-f)

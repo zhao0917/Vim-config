@@ -4,13 +4,13 @@ filetype off                  " required
 "vim 插件安装位置设置{{{
 "注意不要包含vim默认的自动加载目录plugin autoload之类的文件名
 "定义插件安装目录的局部变量，以使用于windows linux 和vim nvim
-if has('win32')
+if g:os_windows
     if has('nvim')
         let s:PlugInstalldir='$VIM/pluged'
     else
         let s:PlugInstalldir='$VIM/vimfiles/pluged'
     endif
-elseif has('unix')
+elseif g:os_linux
     if has('nvim')
         let s:PlugInstalldir='$HOME/nvim/pluged'
     else
@@ -41,35 +41,30 @@ call plug#begin(s:PlugInstalldir)
 " different version somewhere else.
 " Plug 'ascenator/L9', {'name': 'newL9'}
 
-" 这个是在 vim 中使用 git 的插件
-Plug 'tpope/vim-fugitive'
-
 "一个基于Ruby和C扩展实现的快速文件浏览的插件
 " windows 下一直没配置好，所以就禁用了吧
 if !g:os_windows
     Plug 'wincent/command-t'
 endif
 
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-"这是一个html的快速模板插件，比如输入div 扩展为<div></div>
-Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
-
 " All of your Plugs must be added before the following line
 "------------------
 " Code Completions
 "------------------
-" deoplete 是继neocomplete 后Shougo 又开发的补全插件，速度很快
-" 需要安装 pynvim。 相对于YCM来说，安装很简单
+
+" deoplete 是继neocomplete 后Shougo 又开发的补全插件，{{{
+" 速度很快,需要安装 pynvim。 相对于YCM来说，安装很简单
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
-endif
+endif   "}}}
+
 Plug 'Raimondi/delimitMate'
 Plug 'ervandew/supertab'
+
 " snippets
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
@@ -109,6 +104,10 @@ Plug 'ntpeters/vim-better-whitespace'
 " 搜索工具fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+" 这个是在 vim 中使用 git 的插件
+Plug 'tpope/vim-fugitive'
+
 
 "Plug 'Lokaltog/vim-powerline'
 Plug 'scrooloose/syntastic'
@@ -163,29 +162,36 @@ Plug 'lepture/vim-jinja'
 
 "------- web frontend ----------
 "html css js and so on. {{{
-Plug 'othree/html5.vim'
+"Plug 'othree/html5.vim'
 " Plug 'tpope/vim-haml'
-Plug 'pangloss/vim-javascript'
-Plug 'kchmck/vim-coffee-script'
-Plug 'nono/jquery.vim'
+"Plug 'pangloss/vim-javascript'
+"Plug 'kchmck/vim-coffee-script'
+"Plug 'nono/jquery.vim'
 " Plug 'groenewege/vim-less'
 " Plug 'wavded/vim-stylus'
 " Plug 'nono/vim-handlebars'
-Plug 'mattn/emmet-vim'  "}}}
+
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+"这是一个html的快速模板插件，比如输入div 扩展为<div></div>
+"Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+"Plug 'mattn/emmet-vim'
+"}}}
 
 "------- markup language -------
 Plug 'plasticboy/vim-markdown'
-Plug 'jceb/vim-orgmode'
-Plug 'vim-scripts/speeddating.vim'
-Plug 'vim-scripts/NrrwRgn'
-Plug 'vim-scripts/SyntaxRange'
+"Plug 'jceb/vim-orgmode'
+"Plug 'vim-scripts/speeddating.vim'
+"Plug 'vim-scripts/NrrwRgn'
+"Plug 'vim-scripts/SyntaxRange'
 " Plug 'timcharper/textile.vim'
 
 "------- Ruby --------
 " Plug 'tpope/vim-endwise'
 
 "------- Go ----------
-Plug 'fatih/vim-go'
+"Plug 'fatih/vim-go'
 
 "------- FPs ------
 Plug 'kien/rainbow_parentheses.vim'
@@ -199,13 +205,13 @@ Plug 'kien/rainbow_parentheses.vim'
 "Plug 'rickharris/vim-blackboard'
 "Plug 'altercation/vim-colors-solarized'
 Plug 'rickharris/vim-monokai'
-Plug 'tpope/vim-vividchalk'
-Plug 'Lokaltog/vim-distinguished'
-Plug 'chriskempson/vim-tomorrow-theme'
+"Plug 'tpope/vim-vividchalk'
+"Plug 'Lokaltog/vim-distinguished'
+"Plug 'chriskempson/vim-tomorrow-theme'
 "Plug 'fisadev/fisa-vim-colorscheme'
 Plug 'lifepillar/vim-solarized8'
 Plug 'brantb/solarized'
-Plug 'joshdick/onedark.vim'
+"Plug 'joshdick/onedark.vim'
 Plug 'tomasr/molokai'
 Plug 'altercation/vim-colors-solarized'
 ""一个插件的合集
@@ -215,19 +221,19 @@ Plug 'altercation/vim-colors-solarized'
 "---------------
 "python addins
 "---------------
-Plug 'tell-k/vim-autopep8'
+"Plug 'tell-k/vim-autopep8'
 "jedi-vim 不知为何不能正确运行
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
 " windows下的 python-mode 有问题
 "Plug 'python-mode/python-mode'
-Plug 'tmhedberg/SimpylFold'
+"Plug 'tmhedberg/SimpylFold'
 "flake8需要python的flake8包，pip install flake8
-Plug 'nvie/vim-flake8'
+"Plug 'nvie/vim-flake8'
 
 "---------------
 "R support
 "---------------
-Plug 'jalvesaq/Nvim-R'
+"Plug 'jalvesaq/Nvim-R'
 
 "-------------------------------------------------
 "vim 中文文档

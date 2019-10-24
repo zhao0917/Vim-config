@@ -91,40 +91,6 @@ if My_Is_Plugin_load('tagbar')
     endif
 endif  "}}}
 
-" ---------- tags -----------{{{
-" tags 还是要好好设置一下，项目稍微大一点作用就体现出来了
-if My_Is_Plugin_load('vim-gutentags') &&
-    \ My_Is_Plugin_load('gutentags_plus')
-    " enable gtags module
-     let g:gutentags_modules = ['ctags', 'gtags_cscope']
-    "
-    " " config project root markers.
-     let g:gutentags_project_root = ['.root']
-    "
-    " " generate datebases in my cache directory, prevent gtags files polluting my
-    " project
-    if g:os_windows
-         let g:gutentags_cache_dir = expand('$VIM/cache/tags')
-     elseif g:os_unix
-         let g:gutentags_cache_dir = expand('~/.cache/tags')
-     endif
-    "
-    " " change focus to quickfix window after search (optional).
-     let g:gutentags_plus_switch = 1
-     " 禁用默认安装设置，跟nerdcomment有冲突
-    let g:gutentags_plus_nomap = 1
-    noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
-	noremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
-	noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
-	noremap <silent> <leader>gt :GscopeFind t <C-R><C-W><cr>
-	noremap <silent> <leader>ge :GscopeFind e <C-R><C-W><cr>
-	noremap <silent> <leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
-	noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
-	noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
-	noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
-
- endif
- "}}}
 "---------- 文件内容搜索类 ----------
 " ctrlp . {{{
 if My_Is_Plugin_load('ctrlp.vim')
@@ -158,7 +124,8 @@ endif "}}}
 " SuperTab {{{
 if My_Is_Plugin_load('SuperTab')
     " let g:SuperTabDefultCompletionType='context'
-    let g:SuperTabDefaultCompletionType = '<C-X><C-U>'
+    let g:SuperTabDefaultCompletionType = '<C-n>'
+    let g:SuperTabContextDefaultCompletionType = '<c-n>'
     let g:SuperTabRetainCompletionType=2
 endif   "}}}
 
@@ -166,7 +133,7 @@ endif   "}}}
 if My_Is_Plugin_load('deoplete.nvim')
 " 现在版本基本上都是python3了，甚至有些vim 默认不支持python2,除非你自己编译
 " 这个版本的官网源里面预编译版本，已经不支持python2了 <CR>'
-    if g:os_unix
+    if g:os_linux
         " 加载虚拟环境，如果你不用虚拟环境，请注释掉
         " 否则根据你的路径自行修改
         "let g:python3_host_prog = '~youx/py37/bin/python'

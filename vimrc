@@ -4,10 +4,10 @@
 set nocompatible
 
 let g:os_windows=has('win32') || has('win64')
-let g:os_unix=has('unix')
+let g:os_linux=has('linux')
 let g:os_mac=has('osx')
 
-if has('win32')  "这是判断平台的，win下为win32
+if g:os_windows
     if has('nvim')  "是否是nvim
         source $HOME/AppData/Local/nvim/init-plugs.vim
         source $HOME/AppData/Local/nvim/init-plugs-conf.vim
@@ -28,7 +28,7 @@ if has('win32')  "这是判断平台的，win下为win32
 		set rtp+=$VIMFILES/Plugs/
     endif
 
-elseif has('unix')
+elseif g:os_linux
     if has('nvim')
         source $HOME/nvim/init-plugs.vim
         source $HOME/nvim/init-plugs-conf.vim

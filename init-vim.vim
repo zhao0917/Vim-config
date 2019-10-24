@@ -39,7 +39,7 @@ syntax enable
 set background=dark
 if g:os_windows
     colo solarized8
-elseif g:os_unix
+elseif g:os_linux
 		if &term == "screen"
 		set t_Co=256
 		" colo molokai
@@ -52,7 +52,7 @@ endif "}}}
 
 
 "菜单乱码 "{{{
-if has('win32')
+if g:os_windows
     if (has('nvim') != 1)  "vim下使用，nvim下不启用
         source $VIMRUNTIME/delmenu.vim
         source $VIMRUNTIME/menu.vim
@@ -80,7 +80,7 @@ set fencs=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936 "}}}
 "linux下根据help
 """-------------------------------------------------------
 if has('nvim')
-    if has('win32')
+    if g:os_windows
         let g:clipbord = {
                 \   'name': 'myClipboard',
                 \   'copy':{
@@ -151,16 +151,17 @@ function! My_Insert_date()
 endfunction
 "inoremap <leader>date :call My_Insert_date()<CR>
 nnoremap <leader>date :call My_Insert_date()<CR>
-"if has('win32')
+"if g:os_windows
 "    inoremap <leader>date <esc>:r!date/t<cr>
 "    nnoremap <leader>date :r!date/t<cr>
-"elseif has('unix')
+"elseif g:os_linux
 "    inoremap <leader>date <esc>:r!date "+\%F \%T"<cr>
 "    nnoremap <leader>date :r!date "+\%F \%T"<cr>
 "endif "}}}
 
 "常规模式下用;来代替
-noremap ; :
+"跟motion-repeat冲突
+"noremap ; :
 
 " 快速切换window {{{
 nnoremap <c-j> <c-w>j
@@ -179,7 +180,7 @@ nnoremap <Leader>bd :bdel<CR>
 "}}}
 
 " tab 操作快捷键设置 {{{
-"noremap <leader>tn :tabnew<cr>
+noremap <leader>tne :tabnew<cr>
 noremap <leader>te :tabedit<cr>
 noremap <leader>tc :tabclose<cr>
 noremap <leader>tm :tabmove
@@ -269,7 +270,7 @@ function! My_set_vim_tmp(type, local_path)
     endif
 endfunction     "}}}
 
-if has('win32')
+if g:os_windows
     "注意，路径最后一定要加'/'
     "比如'$VIM/backup/' 最后的'/'不能省略
     "也不能'$VIM/backup//'的形式，因为函数
@@ -277,7 +278,7 @@ if has('win32')
     call My_set_vim_tmp('backup', '$VIM/backup/')
     call My_set_vim_tmp('swp', '$VIM/swp/')
     call My_set_vim_tmp('undo', '$VIM/undo/')
-elseif has('unix')
+elseif g:os_linux
     call My_set_vim_tmp('backup', '~/.vim/.backup/')
     call My_set_vim_tmp('swp', '~/.vim/.swp/')
     call My_set_vim_tmp('undo', '~/.vim/.undo/')
@@ -302,7 +303,7 @@ set helplang=cn "中文帮助设置
 "    4. 设置buf属性，没有file也不能回写，没有交换文件，隐藏buff
 "    5. 使用替换命令，将expl中的字符串替换到第一行 来显示
 "    6. 最后的1 就是:1 跳到第一行
-if has('unix')
+if g:os_linux
     function! Mydict()
         let l:expl=system('sdcv -n ' . expand("<cword>"))
         let l:print=0
@@ -334,7 +335,7 @@ if g:os_windows
     nnoremap <silent> <leader>ep :e $VIM/init-plugs.vim<CR>
     nnoremap <silent> <leader>ec :e $VIM/init-plugs-conf.vim<CR>
     nnoremap <silent> <leader>ev :e $VIM/init-vim.vim<CR>
-elseif g:os_unix
+elseif g:os_linux
     nnoremap <silent> <leader>ep :e $HOME/.vim/init-plugs.vim<CR>
     nnoremap <silent> <leader>ec :e $HOME/.vim/init-plugs-conf.vim<CR>
     nnoremap <silent> <leader>ev :e $HOME/.vim/init-vim.vim<CR>

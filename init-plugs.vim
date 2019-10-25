@@ -84,7 +84,7 @@ Plug 'godlygeek/tabular'
 "--------------
 " IDE features
 "--------------
-
+Plug 'fholgado/minibufexpl.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
 
@@ -189,7 +189,7 @@ Plug 'nvie/vim-togglemouse'
 "}}}
 
 "------- markup language -------
-" Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown'
 "Plug 'jceb/vim-orgmode'
 "Plug 'vim-scripts/speeddating.vim'
 "Plug 'vim-scripts/NrrwRgn'
@@ -201,7 +201,7 @@ Plug 'nvie/vim-togglemouse'
 
 
 "------- C & C++ --------
-" Plug 'justmao945/vim-clang'
+Plug 'justmao945/vim-clang'
 
 "------- Go ----------
 "Plug 'fatih/vim-go'
@@ -234,12 +234,15 @@ Plug 'altercation/vim-colors-solarized'
 "---------------
 "python addins
 "---------------
-"Plug 'tell-k/vim-autopep8'
+" jedi 和python-mode冲突
+
+Plug 'tell-k/vim-autopep8'
 "jedi-vim 不知为何不能正确运行
-"Plug 'davidhalter/jedi-vim'
-" windows下的 python-mode 有问题
-"Plug 'python-mode/python-mode'
-"Plug 'tmhedberg/SimpylFold'
+Plug 'davidhalter/jedi-vim'
+
+" 貌似jedi安装时候的卡顿是因为没有安装curl
+" 导致更新时候出错还是什么的
+Plug 'deoplete-plugins/deoplete-jedi'
 "flake8需要python的flake8包，pip install flake8
 "Plug 'nvie/vim-flake8'
 

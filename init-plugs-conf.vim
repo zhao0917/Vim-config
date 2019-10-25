@@ -5,6 +5,14 @@
 " IDE features
 "-----------------------------------------------
 
+"{{{ Minibufexplorer
+if My_Is_Plugin_load('minibufexpl.vim')
+  map <Leader>mbe :MBEOpen<cr>
+  map <Leader>mbc :MBEClose<cr>
+  map <Leader>mbt :MBEToggle<cr>
+endif
+"}}}
+
 " Nerdtree 树型目录浏览器 {{{
 if My_Is_Plugin_load('nerdtree')
     let NERDChristmasTree=0
@@ -418,7 +426,7 @@ autocmd FileType tex,text,txt set tw=100
 " Programming languages
 "-----------------------------------------------
 
-"---------- Pyhton 环境设置 ---------- {{{
+"---------- Pyhton 环境设置 ---------- 
 " python 模式的缩进和tab 设置 "{{{
 au BufNewFile,BufRead *.py
     \ set tabstop=4
@@ -433,12 +441,29 @@ au BufNewFile,BufRead *.py
     \ |  let g:indent_guides_enable_on_vim_startup = 1
 "}}}
 
-"let g:pymode_python = 'python3'
-"设置SimpylFold 的折叠可以看到文档字符串
-let g:SimpylFold_docstring_preview=1
-let python_highlight_all=1
-let g:autopep8_on_save = 1
-"let g:jedi#completions_command = "<C-N>"
+"{{{ jedi 补全和静态检查
+if My_Is_Plugin_load('jedi-vim')
+    let python_highlight_all=1
+
+    " Disabled do some vim configuration
+    " let g:jedi#auto_vim_configuration = 0
+
+    " 弹出时候不选择条目
+    let g:jedi#popup_select_first = 0
+    let g:jedi#use_splits_not_buffers = "top"
+    " 使用deoplete-jedi 禁用jedi资深的补全
+    let g:jedi#completions_enabled = 0
+
+    " Disabled Command <Leader>g
+    let g:jedi#goto_assignments_command = ""
+    " let g:jedi#completions_command = "<C-N>"
+endif
+"}}}
+
+"{{{ Autopep8 
+if My_Is_Plugin_load('vim-Autopep8')
+    let g:autopep8_on_save = 1
+endif
 "}}}
 
 "css html等 "{{{

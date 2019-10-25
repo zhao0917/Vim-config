@@ -56,15 +56,7 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif   "}}}
 
-Plug 'Raimondi/delimitMate'
 Plug 'ervandew/supertab'
-
-" snippets
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
-"------ snipmate dependencies -------
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
 
 "-----------------
 " Fast navigation
@@ -77,7 +69,7 @@ Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'tpope/vim-repeat'
 
 "--------------
-" Fast editing
+" Fast editting
 "--------------
 Plug 'spf13/vim-autoclose'
 Plug 'tpope/vim-surround'
@@ -87,32 +79,47 @@ Plug 'sjl/gundo.vim'
 "  下面是别人做tabular使用和设置脚程
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 Plug 'godlygeek/tabular'
-Plug 'nathanaelkane/vim-indent-guides'
 
-" tcomment_vim是快速开关注释的插件，
-" 也就是可以快速注释\反注释掉一段，一行，n行
-"Plug 'tomtom/tcomment_vim'
 
 "--------------
 " IDE features
 "--------------
+
 Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
+
+" 搜索工具类
 Plug 'mileszs/ack.vim'
 "Plug 'kien/ctrlp.vim'
-Plug 'ntpeters/vim-better-whitespace'
 " 搜索工具fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" 功能增强类
+
 " 这个是在 vim 中使用 git 的插件
 Plug 'tpope/vim-fugitive'
 
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'Raimondi/delimitMate'
+
+" snippets
+Plug 'SirVer/ultisnips'
+" vim-snippets 是模板,ultisnips vim-snipmate 等是
+" 引擎，ultisnips 需要python支持，对模板支持最好
+Plug 'honza/vim-snippets'
+
+"------ snipmate dependencies -------
+"Plug 'garbas/vim-snipmate'
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
 
 "Plug 'Lokaltog/vim-powerline'
 Plug 'scrooloose/syntastic'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
 " 一个tag管理工具
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'skywind3000/gutentags_plus'
@@ -143,7 +150,9 @@ Plug 'prendradjaja/vim-vertigo' "}}}
 "-------------
 "source code format
 "-------------
-Plug 'chiel92/vim-autoformat'
+" 一个支持多语言的通用格式化引擎，需要安装对应语言的
+" 格式化工具采用使用，暂时不配置，不使用
+" Plug 'chiel92/vim-autoformat'
 
 "-------------
 " Other Utils
@@ -155,9 +164,9 @@ Plug 'nvie/vim-togglemouse'
 " Syntax/Indent for language enhancement
 "----------------------------------------
 "------- web backend ---------
-Plug '2072/PHP-Indenting-for-VIm'
+" Plug '2072/PHP-Indenting-for-VIm'
 "Plug 'tpope/vim-rails'
-Plug 'lepture/vim-jinja'
+" Plug 'lepture/vim-jinja'
 "Plug 'digitaltoad/vim-jade'
 
 "------- web frontend ----------
@@ -180,7 +189,7 @@ Plug 'lepture/vim-jinja'
 "}}}
 
 "------- markup language -------
-Plug 'plasticboy/vim-markdown'
+" Plug 'plasticboy/vim-markdown'
 "Plug 'jceb/vim-orgmode'
 "Plug 'vim-scripts/speeddating.vim'
 "Plug 'vim-scripts/NrrwRgn'
@@ -192,7 +201,7 @@ Plug 'plasticboy/vim-markdown'
 
 
 "------- C & C++ --------
-Plug 'justmao945/vim-clang'
+" Plug 'justmao945/vim-clang'
 
 "------- Go ----------
 "Plug 'fatih/vim-go'

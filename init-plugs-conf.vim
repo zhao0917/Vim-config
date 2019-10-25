@@ -1,44 +1,10 @@
 "-----------------------------------------------
 " Plugin settings
 "-----------------------------------------------
-
-"-----------------------------------------------
-" Programming languages
-"-----------------------------------------------
-
-"---------- S-expression ----------
-" Rainbow parentheses for Lisp and variants. {{{
-if My_Is_Plugin_load('rainbow_parentheses.vim')
-    let g:rbpt_colorpairs = [
-        \ ['brown',       'RoyalBlue3'],
-        \ ['Darkblue',    'SeaGreen3'],
-        \ ['darkgray',    'DarkOrchid3'],
-        \ ['darkgreen',   'firebrick3'],
-        \ ['darkcyan',    'RoyalBlue3'],
-        \ ['darkred',     'SeaGreen3'],
-        \ ['darkmagenta', 'DarkOrchid3'],
-        \ ['brown',       'firebrick3'],
-        \ ['gray',        'RoyalBlue3'],
-        \ ['black',       'SeaGreen3'],
-        \ ['darkmagenta', 'DarkOrchid3'],
-        \ ['Darkblue',    'firebrick3'],
-        \ ['darkgreen',   'RoyalBlue3'],
-        \ ['darkcyan',    'SeaGreen3'],
-        \ ['darkred',     'DarkOrchid3'],
-        \ ['red',         'firebrick3'],
-        \ ]
-    let g:rbpt_max = 16
-    " let g:rbpt_loadcmd_toggle = 0
-    autocmd Syntax lisp,scheme,clojure,racket RainbowParenthesesToggle
-                " \ | RainbowParenthesesActivate
-                " \ | RainbowParenthesesLoadRound
-endif "}}}
-
 "-----------------------------------------------
 " IDE features
 "-----------------------------------------------
 
-"---------- 文件浏览 ----------
 " Nerdtree 树型目录浏览器 {{{
 if My_Is_Plugin_load('nerdtree')
     let NERDChristmasTree=0
@@ -56,7 +22,6 @@ if My_Is_Plugin_load('nerdtree')
     nmap <F6> :NERDTreeToggle<cr>
 endif  "}}}
 
-"---------- 代码导航 ----------
 " Tagbar. {{{
 if My_Is_Plugin_load('tagbar')
     noremap <F8> :TagbarToggle<cr>
@@ -91,18 +56,27 @@ if My_Is_Plugin_load('tagbar')
     endif
 endif  "}}}
 
-"---------- 文件内容搜索类 ----------
-" ctrlp . {{{
+" ctrlp . {{{ 文件内容搜索类
 if My_Is_Plugin_load('ctrlp.vim')
     set wildignore+=*/tmp/*,*.so,*.o,*.a,*.obj,*.swp,*.zip,*.pyc,*.pyo,*.class,.DS_Store  " MacOSX/Linux
     let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
 endif   "}}}
 
-"---------- 多余空格处理 对python 特别有用 ----------
-"{{{ vim-better_whitespace_enabled
+"{{{ vim-better_whitespace_enabled  多余空格处理
 if My_Is_Plugin_load('vim-better-whitespace')
     let g:better_whitespace_enabled=1  "全局启用
     let g:strip_whitespace_on_save=1  "保存时候去除多余空格
+
+    " <Leader>s 是本插件提供的快捷键，可以在下面修改
+    " 和syntastic冲突，而且设定保存时候自动运行，基本也不需要
+    " 手动运行了，所以移除快捷键设置
+    let g:better_whitespace_operator=''
+
+    " 取消保存时候的确认提示
+    let g:strip_whitespace_confirm=0
+
+    " 有些相要保留空格的文件，加入下面列表中
+    "let g:better_whitespace_filetypes_blacklist=['','']
 endif
 "}}}
 
@@ -121,6 +95,16 @@ endif "}}}
 " powerline {{{
 "let g:Powerline_symbols = 'fancy' }}}
 
+" VimAirline {{{
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+  " 关闭状态显示空白符号计数,这个对我用处不大"
+  "  let g:airline#extensions#whitespace#enabled = 0
+  "   let g:airline#extensions#whitespace#symbol = '!'
+"}}}
+
 " SuperTab {{{
 if My_Is_Plugin_load('SuperTab')
     " let g:SuperTabDefultCompletionType='context'
@@ -129,7 +113,44 @@ if My_Is_Plugin_load('SuperTab')
     let g:SuperTabRetainCompletionType=2
 endif   "}}}
 
-" deoplete.nvim "{{{
+" syntastic 语法检查器 {{{
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_error_symbol='>>'
+let g:syntastic_warning_symbol='>'
+let g:syntastic_check_on_open=1
+let g:syntastic_check_on_wq=0
+let g:syntastic_enable_highlighting=1
+let g:syntastic_python_checkers=['flake8'] " 使用pyflakes,速度比pylint快
+"let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes,速度比pylint快
+let g:syntastic_javascript_checkers = ['jsl', 'jshint']
+let g:syntastic_html_checkers=['tidy', 'jshint']
+" 修改高亮的背景色, 适应主题
+highlight SyntasticErrorSign guifg=white guibg=black
+
+" to see error location list
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_loc_list_height = 5
+
+function! ToggleErrors()
+    let old_last_winnr = winnr('$')
+    lclose
+    if old_last_winnr == winnr('$')
+        " Nothing was closed, open syntastic error location panel
+        Errors
+    endif
+endfunction
+
+nnoremap <Leader>s :call ToggleErrors()<cr>
+" nnoremap <Leader>sn :lnext<cr>
+" nnoremap <Leader>sp :lprevious<cr>
+" }}}
+
+" deoplete.nvim "{{{  代码补全
 if My_Is_Plugin_load('deoplete.nvim')
 " 现在版本基本上都是python3了，甚至有些vim 默认不支持python2,除非你自己编译
 " 这个版本的官网源里面预编译版本，已经不支持python2了 <CR>'
@@ -155,11 +176,61 @@ autocmd FileType vb set omnifunc=ccomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 "}}}
 
-"-----------------------------------------------
-" IDE features
-"-----------------------------------------------
+"{{{ vim indent guides 缩进显示
+if My_Is_Plugin_load('vim-indent-guides')
+    nnoremap <F4> :IndentGuidesToggle<cr>
+endif
+"}}}
 
-"{{{ numbers.vim
+"{{{ vim-gutentags tag管理工具
+if My_Is_Plugin_load('vim-gutentags')
+
+    " enable gtags module
+    let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+    " config project root markers.
+    let g:gutentags_project_root = ['.root']
+
+    " generate datebases in my cache directory, prevent gtags files polluting my project
+    let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+    " change focus to quickfix window after search (optional).
+    let g:gutentags_plus_switch = 1
+
+    " 停用默认的按键设置，因为会和很多的注释插件冲突
+    let g:gutentags_plus_nomap = 1
+    noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
+    noremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
+    noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
+    noremap <silent> <leader>gt :GscopeFind t <C-R><C-W><cr>
+    noremap <silent> <leader>ge :GscopeFind e <C-R><C-W><cr>
+    noremap <silent> <leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+    noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+    noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
+    noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
+
+endif
+"}}}
+
+"{{{ ultisnips 快速代码片断
+if My_Is_Plugin_load('ultisnips')
+
+    " Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+    " let g:UltiSnipsExpandTrigger="<tab>"
+    let g:UltiSnipsJumpForwardTrigger="<c-n>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-p>"
+
+    " If you want :UltiSnipsEdit to split your window.
+    "let g:UltiSnipsEditSplit="vertical"
+
+endif
+"}}}
+
+"-----------------
+" Fast navigation
+"-----------------
+
+"{{{ numbers.vim  相对行号
 if My_Is_Plugin_load('numbers.vim')
     "  指定不使用相对行号的插件窗口
     let g:numbers_exclude = [
@@ -176,11 +247,18 @@ endif
 " ---------- easymotion ---------- {{{
 if My_Is_Plugin_load('vim-easymotion')
     " Disable default mappings
-    "  禁用以后所有按键都是变成 <Leader><key>
-    "  形式，除非你在下面又更该了设置，所以下面
-    "  虽然没有 <Leader>t的设置，但是你还能使用
-    "  因为它变成默认按键了。
-    let g:EasyMotion_do_mapping = 0
+    " 禁用以后所有快捷键都需要重设
+    " let g:EasyMotion_do_mapping = 0
+
+    ""使用一个<Leader>作为前缀
+    " map <Leader> <Plug>(easymotion-prefix)
+
+    " 这里我们使用仍然使用双leader键，但是修改
+    " 常用的的快捷键
+
+    " easymotion 功能做的十份的强悍，里面的函数有很多，
+    " 具体可以:help easymoiton 看帮助
+
     " <Leader>f{char} to move to {char}
     map  <Leader>f <Plug>(easymotion-bd-f)
     nmap <Leader>f <Plug>(easymotion-overwin-f)
@@ -222,7 +300,9 @@ if My_Is_Plugin_load('vim-easymotion')
     "With this option set, v will match both v and V, but V will match V only.Default: 0"
     let g:EasyMotion_use_smartsign_us = 1 " US layout
     " Use uppercase target labels and type as a lower case
-    let g:EasyMotion_use_upper = 1
+    " 设置为1时候，会导致在 ,w 等模式下，输入小写变为大写，导致
+    " 不能正确识别，从而不能正确跳转
+    let g:EasyMotion_use_upper = 0
     " Smartsign (type `3` and match `3`&`#`)
     let g:EasyMotion_use_smartsign_us = 1
 endif  "}}}
@@ -264,62 +344,53 @@ if My_Is_Plugin_load('incsearch-fuzzy.vim')
     noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 endif "}}}
 
-" Keybindings for plugin toggle
-nmap <F3> :GundoToggle<cr>
-nmap <F4> :IndentGuidesToggle<cr>
 
+"-----------------------------------------------
+" Fast editting
+"-----------------------------------------------
 
-" When editing a file, always jump to the last cursor position{{{
-autocmd BufReadPost *
-      \ if ! exists("g:leave_my_cursor_position_alone") |
-      \     if line("'\"") > 0 && line ("'\"") <= line("$") |
-      \         exe "normal g'\"" |
-      \     endif |
-      \ endif  "}}}
+"{{{ nerdcommenter 快速注释工具
+" 似乎没有什么要设置的，如果又按键冲突再说
+"}}}
 
-" syntastic 语法检查器 {{{
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_error_symbol='>>'
-let g:syntastic_warning_symbol='>'
-let g:syntastic_check_on_open=1
-let g:syntastic_check_on_wq=0
-let g:syntastic_enable_highlighting=1
-let g:syntastic_python_checkers=['flake8'] " 使用pyflakes,速度比pylint快
-"let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes,速度比pylint快
-let g:syntastic_javascript_checkers = ['jsl', 'jshint']
-let g:syntastic_html_checkers=['tidy', 'jshint']
-" 修改高亮的背景色, 适应主题
-highlight SyntasticErrorSign guifg=white guibg=black
+"{{{ tabular 对齐和格式化工具 使用正则表达式
+" 原理是每个匹配的符号处，以符号为中心，将字符分为3部分
+" a , b 如果使用逗号为分割符号
+"   1   2   3
+"   a   ,   b
+"   :Tab /,/[[l,r,c][count],...]
+" 比如 :Tab /,/r1c2l0 :
+" 首先分隔符号 2 对齐;
+" 左边第1部分采用r右对齐；并在第1部分和第二部分之间加1个空格；
+" 然后c2是对2和3之间加2个空格；
+" l0是第3部分采用左对齐，并在后面添加0空格
+" \zs 选项会使得分隔符不会对齐，虽然你写了c2，但作用只是在
+" 分割符后面加了2个空格，也就是r1 c2 l0 对应了分割符的左边；
+" 分隔符本身和分隔符右边
+" 我们一般用下面映射，来对公式和冒号进行格式化
+if My_Is_Plugin_load('tabular')
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
+" 还有一个方便我们写markdown中表格的设置在
+" http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+" 当你每次插入 | 时候，会自动调用实现自动对齐
+" 如果你需要的话反注释下面代码段即可
 
-" to see error location list
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_loc_list_height = 5
-function! ToggleErrors()
-    let old_last_winnr = winnr('$')
-    lclose
-    if old_last_winnr == winnr('$')
-        " Nothing was closed, open syntastic error location panel
-        Errors
-    endif
-endfunction
-nnoremap <Leader>s :call ToggleErrors()<cr>
-" nnoremap <Leader>sn :lnext<cr>
-" nnoremap <Leader>sp :lprevious<cr>
-" }}}
-
-" VimAirline {{{
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-
-  " 关闭状态显示空白符号计数,这个对我用处不大"
-  "  let g:airline#extensions#whitespace#enabled = 0
-  "   let g:airline#extensions#whitespace#symbol = '!'
+"inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+"
+"function! s:align()
+"  let p = '^\s*|\s.*\s|\s*$'
+"  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+"    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+"    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+"    Tabularize/|/l1
+"    normal! 0
+"    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+"  endif
+"endfunction
 "}}}
 
 "------------
@@ -342,22 +413,10 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 autocmd FileType vim,tex,text,txt let b:autoformat_autoindent=0
 autocmd FileType tex,text,txt set tw=100
 
-"------------ VimWiki ---------- {{{
-let g:vimwiki_use_mouse = 1
-let g:vimwiki_list = [{'path': 'E:/VimWiki/',
-            \ 'path_html': 'E:/VimWiki/html/',
-            \ 'html_header': 'E:/VimWiki/Public/template/header.htm',}]
-            "\'html_footer': 'E:/VimWiki/Public/template/footer.htm',
-            "\'diary_link_count': 5,}]
-" 对中文用户来说，我们并不怎么需要驼峰英文成为维基词条
-let g:vimwiki_camel_case = 0
-" 标记为完成的 checklist 项目会有特别的颜色
-let g:vimwiki_hl_cb_checked = 1
-" 我的 vim 是没有菜单的，加一个 vimwiki 菜单项也没有意义
-let g:vimwiki_menu = ''
-" 是否在计算字串长度时用特别考虑中文字符
-let g:vimwiki_CJK_length = 1 "}}}
 
+"-----------------------------------------------
+" Programming languages
+"-----------------------------------------------
 
 "---------- Pyhton 环境设置 ---------- {{{
 " python 模式的缩进和tab 设置 "{{{
@@ -389,3 +448,30 @@ au BufNewFile,BufRead *.js, *.html, *.css
             \ | set shiftwidth=2
 "}}}
 
+"---------- S-expression ----------
+" Rainbow parentheses for Lisp and variants. {{{
+if My_Is_Plugin_load('rainbow_parentheses.vim')
+    let g:rbpt_colorpairs = [
+        \ ['brown',       'RoyalBlue3'],
+        \ ['Darkblue',    'SeaGreen3'],
+        \ ['darkgray',    'DarkOrchid3'],
+        \ ['darkgreen',   'firebrick3'],
+        \ ['darkcyan',    'RoyalBlue3'],
+        \ ['darkred',     'SeaGreen3'],
+        \ ['darkmagenta', 'DarkOrchid3'],
+        \ ['brown',       'firebrick3'],
+        \ ['gray',        'RoyalBlue3'],
+        \ ['black',       'SeaGreen3'],
+        \ ['darkmagenta', 'DarkOrchid3'],
+        \ ['Darkblue',    'firebrick3'],
+        \ ['darkgreen',   'RoyalBlue3'],
+        \ ['darkcyan',    'SeaGreen3'],
+        \ ['darkred',     'DarkOrchid3'],
+        \ ['red',         'firebrick3'],
+        \ ]
+    let g:rbpt_max = 16
+    " let g:rbpt_loadcmd_toggle = 0
+    autocmd Syntax lisp,scheme,clojure,racket RainbowParenthesesToggle
+                " \ | RainbowParenthesesActivate
+                " \ | RainbowParenthesesLoadRound
+endif "}}}

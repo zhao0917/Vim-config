@@ -22,7 +22,7 @@ if has('gui_running')
     "set transparency=30
     ""set guifont=Monaco:h12:cANSI
     set guifont=Consolas:h14:cANSI
-    set guifontwide=YaHei_Mono:h14
+    set guifontwide=YaHei_Mono:h13
     set showtabline=2
     set columns=140
     set lines=40
@@ -182,7 +182,8 @@ nnoremap <Leader>bd :bdel<CR>
 
 " tab 操作快捷键设置 {{{
 " tab 现在已经不流行了，注释掉不再使用,
-" 而且和easy-motion的按键 <leader>t 重合，影响按键效率
+" easymoiton t按键已经不再冲突，下列绑定可以使用,
+" 不过似乎没有必要启用
 "noremap <leader>tne :tabnew<cr>
 "noremap <leader>te :tabedit<cr>
 "noremap <leader>tc :tabclose<cr>

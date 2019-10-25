@@ -41,12 +41,6 @@ call plug#begin(s:PlugInstalldir)
 " different version somewhere else.
 " Plug 'ascenator/L9', {'name': 'newL9'}
 
-"一个基于Ruby和C扩展实现的快速文件浏览的插件
-" windows 下一直没配置好，所以就禁用了吧
-if !g:os_windows
-    Plug 'wincent/command-t'
-endif
-
 " All of your Plugs must be added before the following line
 "------------------
 " Code Completions
@@ -76,7 +70,6 @@ Plug 'tomtom/tlib_vim'
 " Fast navigation
 "-----------------
 Plug 'myusuf3/numbers.vim'
-Plug 'spf13/vim-autoclose'
 Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-easymotion.vim'
@@ -86,9 +79,13 @@ Plug 'tpope/vim-repeat'
 "--------------
 " Fast editing
 "--------------
+Plug 'spf13/vim-autoclose'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
 Plug 'sjl/gundo.vim'
+" tabular 通用格式化代码，对齐代码.
+"  下面是别人做tabular使用和设置脚程
+" http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 Plug 'godlygeek/tabular'
 Plug 'nathanaelkane/vim-indent-guides'
 

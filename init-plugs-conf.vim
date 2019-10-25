@@ -99,7 +99,7 @@ if My_Is_Plugin_load('ctrlp.vim')
 endif   "}}}
 
 "---------- 多余空格处理 对python 特别有用 ----------
-"{{{
+"{{{ vim-better_whitespace_enabled
 if My_Is_Plugin_load('vim-better-whitespace')
     let g:better_whitespace_enabled=1  "全局启用
     let g:strip_whitespace_on_save=1  "保存时候去除多余空格
@@ -155,9 +155,32 @@ autocmd FileType vb set omnifunc=ccomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 "}}}
 
+"-----------------------------------------------
+" IDE features
+"-----------------------------------------------
+
+"{{{ numbers.vim
+if My_Is_Plugin_load('numbers.vim')
+    "  指定不使用相对行号的插件窗口
+    let g:numbers_exclude = [
+                \'tagbar',
+                \'gundo',
+                \'minibufexpl',
+                \ 'unite',
+                \ 'startify',
+                \ 'vimshell',
+                \'nerdtree']
+endif
+"}}}
+
 " ---------- easymotion ---------- {{{
 if My_Is_Plugin_load('vim-easymotion')
-    let g:EasyMotion_do_mapping = 0 " Disable default mappings
+    " Disable default mappings
+    "  禁用以后所有按键都是变成 <Leader><key>
+    "  形式，除非你在下面又更该了设置，所以下面
+    "  虽然没有 <Leader>t的设置，但是你还能使用
+    "  因为它变成默认按键了。
+    let g:EasyMotion_do_mapping = 0
     " <Leader>f{char} to move to {char}
     map  <Leader>f <Plug>(easymotion-bd-f)
     nmap <Leader>f <Plug>(easymotion-overwin-f)

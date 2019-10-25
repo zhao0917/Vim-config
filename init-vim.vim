@@ -175,20 +175,23 @@ nnoremap <C-N> :bn<CR>
 nnoremap <C-P> :bp<CR>
 nnoremap <C-F> :bf<CR>
 ":br == :bf 到第一个缓冲区
-nnoremap <C-R> :br<CR>
+" C-r 和默认的redo快捷键冲突
+"nnoremap <C-R> :br<CR>
 nnoremap <Leader>bd :bdel<CR>
 "}}}
 
 " tab 操作快捷键设置 {{{
-noremap <leader>tne :tabnew<cr>
-noremap <leader>te :tabedit<cr>
-noremap <leader>tc :tabclose<cr>
-noremap <leader>tm :tabmove
-noremap <Leader>tp :tabprevious<cr>
-noremap <Leader>tn :tabnext<cr>
-noremap <Leader>to :tabonly<cr>
-noremap <Leader>tf :tabfirst<cr>
-noremap <Leader>tl :tablast<cr>
+" tab 现在已经不流行了，注释掉不再使用,
+" 而且和easy-motion的按键 <leader>t 重合，影响按键效率
+"noremap <leader>tne :tabnew<cr>
+"noremap <leader>te :tabedit<cr>
+"noremap <leader>tc :tabclose<cr>
+"noremap <leader>tm :tabmove
+"noremap <Leader>tp :tabprevious<cr>
+"noremap <Leader>tn :tabnext<cr>
+"noremap <Leader>to :tabonly<cr>
+"noremap <Leader>tf :tabfirst<cr>
+"noremap <Leader>tl :tablast<cr>
     "}}}
 
 " eggcache vim {{{

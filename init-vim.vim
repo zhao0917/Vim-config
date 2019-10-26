@@ -59,7 +59,7 @@ if g:os_windows
     endif
 endif "}}}
 
-set noimdisable
+" set noimdisable
 set showcmd "显示输入的命令
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}   "状态行显示的内容
 
@@ -159,9 +159,6 @@ nnoremap <leader>date :call My_Insert_date()<CR>
 "    nnoremap <leader>date :r!date "+\%F \%T"<cr>
 "endif "}}}
 
-"常规模式下用;来代替
-"跟motion-repeat冲突
-"noremap ; :
 
 " 快速切换window {{{
 nnoremap <c-j> <c-w>j

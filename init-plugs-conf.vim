@@ -122,40 +122,51 @@ if My_Is_Plugin_load('SuperTab')
 endif   "}}}
 
 " syntastic 语法检查器 {{{
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_error_symbol='>>'
-let g:syntastic_warning_symbol='>'
-let g:syntastic_check_on_open=1
-let g:syntastic_check_on_wq=0
-let g:syntastic_enable_highlighting=1
-let g:syntastic_python_checkers=['flake8'] " 使用pyflakes,速度比pylint快
-"let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes,速度比pylint快
-let g:syntastic_javascript_checkers = ['jsl', 'jshint']
-let g:syntastic_html_checkers=['tidy', 'jshint']
-" 修改高亮的背景色, 适应主题
-highlight SyntasticErrorSign guifg=white guibg=black
+if My_Is_Plugin_load('syntastic')
 
-" to see error location list
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_loc_list_height = 5
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
 
-function! ToggleErrors()
+    let g:syntastic_error_symbol='>>'
+    let g:syntastic_warning_symbol='>'
+    let g:syntastic_check_on_open=1
+    let g:syntastic_check_on_wq=0
+    let g:syntastic_enable_highlighting=1
+
+    " 使用pyflakes,速度比pylint快
+    let g:syntastic_python_checkers=['flake8'] 
+    " flake8参数设置
+    let g:syntastic_python_flake8_args="--ignore=E121,E123,E126,E226,E24,E704,W503,W504,F401"
+    "let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes,速度比pylint快
+
+    " let g:syntastic_javascript_checkers = ['jsl', 'jshint']
+    " let g:syntastic_html_checkers=['tidy', 'jshint']
+    
+    " 修改高亮的背景色, 适应主题
+    highlight SyntasticErrorSign guifg=white guibg=black
+
+    " to see error location list
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+    let g:syntastic_loc_list_height = 5
+
+    function! ToggleErrors()
     let old_last_winnr = winnr('$')
     lclose
     if old_last_winnr == winnr('$')
         " Nothing was closed, open syntastic error location panel
         Errors
     endif
-endfunction
+    endfunction
 
-nnoremap <Leader>s :call ToggleErrors()<cr>
-" nnoremap <Leader>sn :lnext<cr>
-" nnoremap <Leader>sp :lprevious<cr>
+    nnoremap <Leader>s :call ToggleErrors()<cr>
+    " nnoremap <Leader>sn :lnext<cr>
+    " nnoremap <Leader>sp :lprevious<cr>
+
+endif
 " }}}
 
 " deoplete.nvim "{{{  代码补全
@@ -462,7 +473,14 @@ endif
 
 "{{{ Autopep8 
 if My_Is_Plugin_load('vim-Autopep8')
+    " let g:autopep8_ignore="E501,W293"
+
+    " Disable show diff window
+    let g:autopep8_disable_show_diff=1
     let g:autopep8_on_save = 1
+
+    " 如果你使用"="来使用autopep8
+    " autocmd FileType python set equalprg=autopep8\ -
 endif
 "}}}
 

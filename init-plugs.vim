@@ -147,6 +147,14 @@ Plug 'reedes/vim-textobj-quote'
 " let g:Vertigo_homerow = 'aoeuidhtns' 来设置按键和数字对应关系
 Plug 'prendradjaja/vim-vertigo' "}}}
 
+
+"-------------
+" 其他一些辅助工具
+"-------------
+" 输入法切换，windos下需要下载im-select并
+" 设置路径
+Plug 'zhao0917/smartim'
+
 "-------------
 "source code format
 "-------------

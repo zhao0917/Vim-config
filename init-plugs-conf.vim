@@ -412,6 +412,7 @@ endif
 "endfunction
 "}}}
 
+let g:smartim_im_select_path = "C:\\gnu\\bin\\im-select"
 "------------
 "AutoFormat
 "------------

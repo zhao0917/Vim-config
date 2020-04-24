@@ -100,7 +100,7 @@ endif   "}}}
 "set rnu    "显示相对行号
 set backspace=indent,eol,start
 
-set hlsearch "高亮搜索结果
+" set hlsearch "高亮搜索结果
 "取消搜索高亮
 noremap <leader>/ :nohl<cr>
 set ic "忽略大小写查找

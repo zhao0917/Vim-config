@@ -89,9 +89,59 @@ endif
 "}}}
 
 " Ack 快捷键 "{{{
-nnoremap <Leader>ack :Ack!<Space>
-inoremap <Leader>ack <esc>:Ack!<Space>
+if My_Is_Plugin_load('ack.vim')
+    " 使用ag作为ack搜索引擎
+    let g:ackprg = "ag --vimgrep"
+    nnoremap <Leader>ack :Ack!<Space>
+    inoremap <Leader>ack <esc>:Ack!<Space>
+endif
 "}}}
+
+"{{{ Ag 配置
+if My_Is_Plugin_load('ag.vim')
+    " 设置搜索目录为当前目录
+    let g:ag_working_path_mode="r"
+endif
+"}}}
+
+"{{{  LeaderF 
+if My_Is_Plugin_load('LeaderF')
+    " don't show the help in normal mode
+    let g:Lf_HideHelp = 1
+    let g:Lf_UseCache = 0
+    let g:Lf_UseVersionControlTool = 0
+    let g:Lf_IgnoreCurrentBufferName = 1
+    " popup mode
+    let g:Lf_WindowPosition = 'popup'
+    let g:Lf_PreviewInPopup = 1
+    " let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font':
+    "DejaVu Sans Mono for Powerline" }
+    let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+    let g:Lf_WindowHeight = 0.3 " 窗口高度，百分比
+
+    let g:Lf_ShortcutF = "<leader>ff" " 默认快捷键跟easymotion冲突了，修改下
+
+    noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+    noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+    noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+    noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+
+    " noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+    " noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+    " search visually selected text literally
+    " xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ",
+    " leaderf#Rg#visual())<CR>
+    " noremap go :<C-U>Leaderf! rg --recall<CR>
+    
+    " " should use `Leaderf gtags --update` first
+    let g:Lf_GtagsAutoGenerate = 0
+    let g:Lf_Gtagslabel = 'native-pygments'
+    noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+    noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+    noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+    noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+    noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+endif"}}}
 
 " nerdcommenter C 风格的注释插件 "{{{
 if My_Is_Plugin_load('nerdcommenter')
@@ -111,6 +161,133 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
   " 关闭状态显示空白符号计数,这个对我用处不大"
   "  let g:airline#extensions#whitespace#enabled = 0
   "   let g:airline#extensions#whitespace#symbol = '!'
+"}}}
+
+"{{{  coc.nvim
+if My_Is_Plugin_load('coc.nvim')
+    " TextEdit might fail if hidden is not set.
+    set hidden
+
+    " Some servers have issues with backup files, see #649.
+    set nobackup
+    set nowritebackup
+
+    " Give more space for displaying messages.
+    set cmdheight=2
+
+    " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+    " delays and poor user experience.
+    set updatetime=300
+
+    " Don't pass messages to |ins-completion-menu|.
+    set shortmess+=c
+
+    " Always show the signcolumn, otherwise it would shift the text each time
+    " diagnostics appear/become resolved.
+    set signcolumn=yes
+    " Use tab for trigger completion with characters ahead and navigate.
+    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+    " other plugin before putting this into your config.
+    " inoremap <silent><expr> <TAB>
+          " \ pumvisible() ? "\<C-n>" :
+          " \ <SID>check_back_space() ? "\<TAB>" :
+          " \ coc#refresh()
+     " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+    " Use <c-space> to trigger completion.
+    inoremap <silent><expr> <c-space> coc#refresh()
+
+    " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+    " position. Coc only does snippet and additional edit on confirm.
+    if has('patch8.1.1068')
+      " Use `complete_info` if your (Neo)Vim version supports it.
+      inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+    else
+      imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    endif
+
+    " Use `[g` and `]g` to navigate diagnostics
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+    " GoTo code navigation.
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+
+    " Use K to show documentation in preview window.
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+    " Highlight the symbol and its references when holding the cursor.
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Symbol renaming.
+    nmap <leader>rn <Plug>(coc-rename)
+
+    " Add (Neo)Vim's native statusline support.
+    " NOTE: Please see `:h coc-status` for integrations with external plugins that
+    " provide custom statusline: lightline.vim, vim-airline.
+    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+endif
+"}}}
+
+"{{{ ale
+if My_Is_Plugin_load('ale')
+    " 什么时候启动语法检查
+    " Never check buffers on changes
+    let g:ale_lint_on_text_changed=0
+    " 退除insert模式不检查
+    let g:ale_lint_on_insert_leave=0
+    " BufWinEnter事件不检查
+    let g:ale_lint_on_enter=0
+    " 文件类型改变时候不检查
+    let g:ale_lint_on_filetype_changed = 0
+
+    " 语法检查器的设置，注意这是一个字典，会和默认的
+    " 字典进行合并，所以，禁用某种语言的检查器，将
+    " 对应语言的检查器设置为[]即可。如果你要设置多个
+    " 语言的检查器，请写在一个字典里面
+    " 一个语言可以写多个检查器，在方括号用逗号隔开
+    " ['flake8','pyflakes']
+    let g:ale_linters = {'javascript': ['eslint'],
+                \'python':['flake8']}
+    " Only run linters named in ale_linters settings.
+    let g:ale_linters_explicit = 1
+
+    " 显示ale状态栏
+    let g:ale_sign_column_always=1
+
+    " 关闭高亮
+    let g:ale_set_highlights=0
+
+    " 警告和错误标志
+
+    " java设置或许可以在linux上设置，windows还是用eclipse等ide吧
+    " let g:ale_java_google_java_format_executable = 
+                " \'D:\\Program Files\\Java\\jdk-14\\lib\\google-java-format-1.7'
+    " let g:ale_java_google_java_format_use_global = 1 
+    " 代码修复工具
+    " 第一行是针对所有代码的
+    let g:ale_fixers = {
+                \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+                \   'javascript': ['eslint'],
+                \   'python' : ['autopep8'],
+                \   'c':['clangd'],
+                \   'c++':['clangd']
+                \}
+endif
 "}}}
 
 " SuperTab {{{
@@ -208,7 +385,10 @@ if My_Is_Plugin_load('vim-gutentags')
     let g:gutentags_modules = ['ctags', 'gtags_cscope']
 
     " config project root markers.
-    let g:gutentags_project_root = ['.root']
+    let g:gutentags_project_root = ['.root', '.svn', '.git', '.project']
+
+    " 所生成的数据文件的名称 "
+    " let g:gutentags_ctags_tagfile = '.tags'
 
     " generate datebases in my cache directory, prevent gtags files polluting my project
     let g:gutentags_cache_dir = expand('~/.cache/tags')
@@ -236,8 +416,8 @@ if My_Is_Plugin_load('ultisnips')
 
     " Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
     " let g:UltiSnipsExpandTrigger="<tab>"
-    let g:UltiSnipsJumpForwardTrigger="<c-n>"
-    let g:UltiSnipsJumpBackwardTrigger="<c-p>"
+    let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
     " If you want :UltiSnipsEdit to split your window.
     "let g:UltiSnipsEditSplit="vertical"
@@ -298,8 +478,8 @@ if My_Is_Plugin_load('vim-easymotion')
     nmap t <Plug>(easymotion-t2)
 
     " 取代默认的搜索键
-    map  / <Plug>(easymotion-sn)
-    omap / <Plug>(easymotion-tn)
+    " map  / <Plug>(easymotion-sn)
+    " omap / <Plug>(easymotion-tn)
     " These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
     " Without these mappings, `n` & `N` works fine. (These mappings just provide
     " different highlight method and have some other features )
@@ -333,6 +513,18 @@ if My_Is_Plugin_load('incsearch.vim') &&
     " You can use other keymappings like <C-l> instead of <CR> if you want to
     " use these mappings as default search and somtimes want to move cursor with
     " EasyMotion.
+
+    " 搜索后自动关闭高亮
+    set hlsearch
+    let g:incsearch#auto_nohlsearch = 1
+
+    " map n  <Plug>(incsearch-nohl-n)
+    " map N  <Plug>(incsearch-nohl-N)
+    map *  <Plug>(incsearch-nohl-*)
+    map #  <Plug>(incsearch-nohl-#)
+    map g* <Plug>(incsearch-nohl-g*)
+    map g# <Plug>(incsearch-nohl-g#)
+
     function! s:incsearch_config(...) abort
       return incsearch#util#deepextend(deepcopy({
       \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
@@ -343,12 +535,14 @@ if My_Is_Plugin_load('incsearch.vim') &&
       \ }), get(a:, 1, {}))
     endfunction
 
+
     noremap <silent><expr> /  incsearch#go(<SID>incsearch_config())
     noremap <silent><expr> ?  incsearch#go(<SID>incsearch_config({'command': '?'}))
     noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
 endif  "}}}
 
 "---------- incsearch fuzzy ----------{{{
+" 糢糊搜索
 if My_Is_Plugin_load('incsearch-fuzzy.vim')
     function! s:config_easyfuzzymotion(...) abort
       return extend(copy({
@@ -361,6 +555,20 @@ if My_Is_Plugin_load('incsearch-fuzzy.vim')
     endfunction
 
     noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
+
+    " 同时使用fuzzy和fuzzyspell特性
+    function! s:config_fuzzyall(...) abort
+      return extend(copy({
+      \   'converters': [
+      \     incsearch#config#fuzzy#converter(),
+      \     incsearch#config#fuzzyspell#converter()
+      \   ],
+      \ }), get(a:, 1, {}))
+    endfunction
+
+    noremap <silent><expr> z/ incsearch#go(<SID>config_fuzzyall())
+    noremap <silent><expr> z? incsearch#go(<SID>config_fuzzyall({'command': '?'}))
+    noremap <silent><expr> zg? incsearch#go(<SID>config_fuzzyall({'is_stay': 1}))
 endif "}}}
 
 
@@ -370,6 +578,39 @@ endif "}}}
 
 "{{{ nerdcommenter 快速注释工具
 " 似乎没有什么要设置的，如果又按键冲突再说
+"}}}
+
+"{{{ DoxygenToolkit
+if My_Is_Plugin_load('DoxygenToolkit.vim')
+
+    let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
+    let g:DoxygenToolkit_blockFooter="----------------------------------------------------------------------------"
+
+    " 作者和邮箱
+    let g:DoxygenToolkit_authorName="ZhaoYouxiao,z_hao0917@126.com" 
+
+    " 拼接出License，原脚本也是这么干的
+    let s:licenseTag = "\<enter>" 
+    let s:licenseTag = s:licenseTag . "Call Center On Demand Product Series\<enter>" 
+    let s:licenseTag = s:licenseTag . "Copyright (C) 2015 ChannelSoft(Beijing.) Technology Ltd., Co.\<enter>" 
+    let s:licenseTag = s:licenseTag . "All right reserved\<enter>" 
+    let s:licenseTag = s:licenseTag . "\<enter>" 
+    let s:licenseTag = s:licenseTag . "$$\<enter>" 
+    let s:licenseTag = s:licenseTag . "TODO:\<enter>" 
+    let s:licenseTag = s:licenseTag . "\<enter>" 
+    let s:licenseTag = s:licenseTag . g:DoxygenToolkit_blockFooter
+    let g:DoxygenToolkit_licenseTag =  s:licenseTag 
+
+    " 函数注释
+    let g:DoxygenToolkit_paramTag_pre="@Param "
+    let g:DoxygenToolkit_returnTag="@Returns   "
+
+    " let g:DoxygenToolkit_briefTag_funcName="no" 
+    " let g:doxygen_enhanced_color=1 
+    " 使用C++的 ///注释
+    " let g:DoxygenToolkit_commentType="C++" 
+    let g:DoxygenToolkit_classTag = "@class "
+endif
 "}}}
 
 "{{{ tabular 对齐和格式化工具 使用正则表达式
@@ -472,6 +713,8 @@ if My_Is_Plugin_load('jedi-vim')
 endif
 "}}}
 
+    let g:autopep8_disable_show_diff=1
+    let g:autopep8_on_save = 1
 "{{{ Autopep8 
 if My_Is_Plugin_load('vim-Autopep8')
     " let g:autopep8_ignore="E501,W293"

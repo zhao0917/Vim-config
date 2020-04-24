@@ -46,15 +46,42 @@ call plug#begin(s:PlugInstalldir)
 " Code Completions
 "------------------
 
+"--- Language Server Client ---现在补全的主流是
+"language server protocol
+
+" LanguageClient-neovim 异步，python写的lsp
+" 支持deoplete 和ncm2两个补全框架
+" Plug 'autozimu/LanguageClient-neovim'
+
+" vim-lsp是纯vimscript写的lsp，
+" asyncomplete, deoplete和ncm2三个补全框架
+" Plug 'prabirshrestha/vim-lsp'
+
+" coc是2018年的黑马，nodejs后端，目的就是实现类似
+" vsc的补全，支持自身的补全框架
+" 需要安装nodejs如果没有的话
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" 补全框架有:可以参考这里
+" https://www.zhihu.com/question/23590572
+" deoplete.nvim
+" ncm2
+" asyncomplete
+" coc.nvim
+
+
 " deoplete 是继neocomplete 后Shougo 又开发的补全插件，{{{
 " 速度很快,需要安装 pynvim。 相对于YCM来说，安装很简单
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif   "}}}
+" if has('nvim')
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+  " Plug 'Shougo/deoplete.nvim'
+  " Plug 'roxma/nvim-yarp'
+  " Plug 'roxma/vim-hug-neovim-rpc'
+" 糢糊搜索插件
+" Plug 'Shougo/denite.nvim'
+
+" endif   "}}}
 
 Plug 'ervandew/supertab'
 
@@ -73,7 +100,12 @@ Plug 'tpope/vim-repeat'
 "--------------
 Plug 'spf13/vim-autoclose'
 Plug 'tpope/vim-surround'
-Plug 'scrooloose/nerdcommenter'
+" 注释插件scrooloose git上已经无法找到
+" vim-commentary没怎么用过
+" Plug 'scrooloose/nerdcommenter'
+" Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'sjl/gundo.vim'
 " tabular 通用格式化代码，对齐代码.
 "  下面是别人做tabular使用和设置脚程
@@ -87,12 +119,43 @@ Plug 'godlygeek/tabular'
 Plug 'fholgado/minibufexpl.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
+" vdebug python似乎不能用，需要下载的插件无法安装
+" Plug 'vim-vdebug/vdebug'
 
+"--------------
 " 搜索工具类
+"--------------
+" ag 的vim插件，需要安装ag程序，windows下载exe，linux一般源
+" 里面都有了，apt install即可
+Plug 'rking/ag.vim'
+
+" Rg的vim插件
+" Plug 'jremmen/vim-ripgrep'
+
+" vim搜索插件，据说支持grep ag rg sift等
+" Plug 'mhinz/vim-grepper'
+
+" ferret是一个增强的多文件搜索工具，主要是对ag rg和ack的封装
+" Plug 'wincent/ferret'
+
 Plug 'mileszs/ack.vim'
+
+" 高效 糢糊搜索插件，1.2k Stars
+if  g:os_linux
+    Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+elseif g:os_windows
+    Plug 'Yggdroot/LeaderF', { 'do': '.\install.bat' }
+endif
+
 "Plug 'kien/ctrlp.vim'
+
 " 搜索工具fzf
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" windows下fzf要自己下载exe文件
+if g:os_linux 
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+elseif g:os_windows
+    Plug 'junegunn/fzf'
+endif
 Plug 'junegunn/fzf.vim'
 
 " 功能增强类
@@ -115,7 +178,15 @@ Plug 'honza/vim-snippets'
 "Plug 'tomtom/tlib_vim'
 
 "Plug 'Lokaltog/vim-powerline'
-Plug 'scrooloose/syntastic'
+" --- 语法检查 ---
+Plug 'dense-analysis/ale'
+" java语法检查，但是windows下似乎有问题
+" if g:os_linux
+    " Plug 'eclipse/eclipse.jdt.ls',{'do':'./mvnw clean verify'}
+" elseif g:os_windows
+    " Plug 'eclipse/eclipse.jdt.ls',{'do':'./mvnw.cmd clean verify'}
+" endif
+" Plug 'scrooloose/syntastic'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -198,11 +269,14 @@ Plug 'nvie/vim-togglemouse'
 
 "------- markup language -------
 Plug 'plasticboy/vim-markdown'
-"Plug 'jceb/vim-orgmode'
+Plug 'jceb/vim-orgmode'
 "Plug 'vim-scripts/speeddating.vim'
 "Plug 'vim-scripts/NrrwRgn'
 "Plug 'vim-scripts/SyntaxRange'
 " Plug 'timcharper/textile.vim'
+
+" tex & latex
+Plug 'lervag/vimtex'  "Plug for latex
 
 "------- Ruby --------
 " Plug 'tpope/vim-endwise'
@@ -244,7 +318,10 @@ Plug 'altercation/vim-colors-solarized'
 "---------------
 " jedi 和python-mode冲突
 
-Plug 'tell-k/vim-autopep8'
+if g:os_windows 
+    Plug 'tell-k/vim-autopep8'
+endif
+
 "jedi-vim 不知为何不能正确运行
 Plug 'davidhalter/jedi-vim'
 
@@ -264,6 +341,8 @@ Plug 'deoplete-plugins/deoplete-jedi'
 "-------------------------------------------------
 Plug 'yianwillis/vimcdoc'
 
+" 编程语言备忘录
+Plug 'LeCoupa/awesome-cheatsheets'
 "--------------
 "download plugins from web manually
 "--------------

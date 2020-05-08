@@ -165,6 +165,9 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 
 "{{{  coc.nvim
 if My_Is_Plugin_load('coc.nvim')
+    " 插件设置
+    call coc#add_extension('coc-json','coc-python','coc-jedi',
+                \ 'coc-clangd', 'coc-cmake', 'coc-snippets')
     " TextEdit might fail if hidden is not set.
     set hidden
 

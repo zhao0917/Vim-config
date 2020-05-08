@@ -57,17 +57,22 @@ call plug#begin(s:PlugInstalldir)
 " asyncomplete, deoplete和ncm2三个补全框架
 " Plug 'prabirshrestha/vim-lsp'
 
-" coc是2018年的黑马，nodejs后端，目的就是实现类似
-" vsc的补全，支持自身的补全框架
-" 需要安装nodejs如果没有的话
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " 补全框架有:可以参考这里
 " https://www.zhihu.com/question/23590572
 " deoplete.nvim
 " ncm2
 " asyncomplete
 " coc.nvim
+
+" coc是2018年的黑马，nodejs后端，目的就是实现类似
+" vsc的补全，支持自身的补全框架
+" 需要安装nodejs如果没有的话
+
+"-----------------
+" coc
+"-----------------
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 
 " deoplete 是继neocomplete 后Shougo 又开发的补全插件，{{{
@@ -318,7 +323,8 @@ Plug 'altercation/vim-colors-solarized'
 "---------------
 " jedi 和python-mode冲突
 
-if g:os_windows 
+" autopep8 windows下和linux下不一样
+if g:os_linux 
     Plug 'tell-k/vim-autopep8'
 endif
 
@@ -327,7 +333,7 @@ Plug 'davidhalter/jedi-vim'
 
 " 貌似jedi安装时候的卡顿是因为没有安装curl
 " 导致更新时候出错还是什么的
-Plug 'deoplete-plugins/deoplete-jedi'
+" Plug 'deoplete-plugins/deoplete-jedi'
 "flake8需要python的flake8包，pip install flake8
 "Plug 'nvie/vim-flake8'
 

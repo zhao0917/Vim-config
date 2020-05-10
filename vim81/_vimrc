@@ -1,0 +1,18 @@
+" 由于vim的$VIM发生改变，所以新增_vimrc以保证兼容
+
+let g:os_windows=has('win32') || has('win64')
+let g:os_linux=has('linux')
+let g:os_mac=has('osx')
+
+
+if g:os_windows && v:version >= 802
+    if !has('nvim')
+        " 将$vim 设置为 path/vim/ 而不是 path/vim/vim(version)
+        let s:vim = split(expand($VIM),"\\")
+        let s:vim = s:vim[0:len(s:vim)-2]
+        " echom s:vim
+        let $VIM = join(s:vim,"\\")
+        " echom $VIM
+        source $VIM/vimrc
+    endif
+endif

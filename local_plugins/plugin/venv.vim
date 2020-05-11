@@ -29,6 +29,10 @@
 " 通过修改sys.path实现
 
 
+" 这两行是用来保证置位compatible选项后脚本可以顺利执行而不出错
+let s:save_cpo = &cpo
+set cpo&vim
+
 if exists("g:venv_loaded")
     finish
 else
@@ -44,35 +48,42 @@ endif
 py3 import vim, sys, os, re
 
 " 检查是否使用了conda
-silent let s:conda_ver =  system('conda --version')
+function! s:Venv_is_conda_installed()
+    silent let l:conda_ver =  system('conda --version')
 
-if match(s:conda_ver, "\\Mconda \\(\\d\\+.\\)\\{2}\\d")  == -1
-    let s:conda_installed = 0
-else
-    let s:conda_installed =1
-endif
+    if match(l:conda_ver, "\\Mconda \\(\\d\\+.\\)\\{2}\\d")  == -1
+        return v:false
+    else
+        return v:true
+    endif
+endfunction
 
 
 " 如何判断conda已经启用，以及conda中envs信息
 " 通过conda info -e 获取conda的envs信息，然后根据$PATH确认某个env是否被激活
 function! s:Venv_get_envs()
-    let l:conda_info_cmd = "conda info -e |sed -e '/^#/d' |sed -r 's/\\s+/ /g'"
+    let l:conda_info_cmd = "conda info -e"
     let l:conda_info = system(l:conda_info_cmd)->split('\n')
     let l:conda_envs={"*current*":""}
 
-    for l:row in l:conda_info
-        " 去掉多余的行
-        " if   l:row =~ "^\\(\\s\\|\\n\\)+" || l:row ==""
-        if  l:row ==""
-            continue
+    let l:index=0
+    while l:index < len(l:conda_info)
+        let l:item = l:conda_info[l:index]
+        if l:item =~ "^#" || len(l:item) == 0
+            call remove(l:conda_info,l:index)
         else
-            " 当前激活的env
-            if match(l:row,"*") != -1
-                " 去除带'*'号行中的'*'和多余空白字符
-                let l:row = substitute(row,"\\(\\s\\|\\*\\)\\+"," ",'g')
-                let l:conda_envs["*current*"]=l:row->split()[0]
-            endif
+            let l:conda_info[l:index] = substitute(l:item,"\\s\\+",' ','g')
+            let l:index+=1
+        endif
+    endwhile
 
+    for l:row in l:conda_info
+        " 当前激活的env
+        if match(l:row,"*") != -1
+            " 去除带'*'号行中的'*'和多余空白字符
+            let l:row = substitute(row,"\\(\\s\\|\\*\\)\\+"," ",'g')
+            let l:conda_envs["*current*"]=l:row->split()[0]
+        else
             let l:temp_list=l:row->split()
             " 这里拆分后有错误，单个字符串无法拆为两个元素，要用try
             if len(l:temp_list) == 2
@@ -92,12 +103,12 @@ endfunction
 
 
 " 取得python version的命令后缀
-let s:sh_suffix_py_ver = " --version | awk -F '[. ]' '{print $2\".\"$3}'"
-
-
+let s:python_version_options = " --version"
 function! s:Venv_get_env_py_major_ver(python_exe)
-    " 获取venv中python版本号
-   return system(a:python_exe . s:sh_suffix_py_ver)->trim()
+" 获取venv中python版本号
+    silent let l:python_version = system(a:python_exe .
+                \ s:python_version_options)->split()[1]
+    return l:python_version->split("\\.")[:-2]->join('.')
 endfunction
 
 let s:conda_envs = s:Venv_get_envs()
@@ -105,6 +116,13 @@ let s:vim_py_ver = s:Venv_get_vim_py_major_ver()
 
 
 function! Venv_set_venv()
+    " 设置python的sys.path 使得vimu运行在正确的python环境下
+
+    if !s:Venv_is_conda_installed()
+        echom "Anaconda3 or miniconda3 is not installed yet, please ensure one of them is" .
+                    \ "installed and conda is in your system path"
+        return -1
+    endif
 
     for [l:key,l:value] in items(s:conda_envs)
         if l:key ==# "*current*" && len(l:value) > 0
@@ -119,7 +137,7 @@ function! Venv_set_venv()
         if l:conda_env_py_ver == s:vim_py_ver
             if l:py_exe == 'python'
                 " 当前conda环境根vim 使用的python版本一致
-                finish
+                return 0
             else
                 " 在sys.path中设置虚拟的环境变量
                 if len(s:conda_envs["*current*"]) == 0
@@ -177,3 +195,8 @@ EOF
 endfunction
 
 call Venv_set_venv()
+
+" 这两行是用来保证置位compatible选项后脚本可以顺利执行而不出错
+let &cpo = s:save_cpo
+unlet s:save_cpo
+

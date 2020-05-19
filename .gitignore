@@ -1,0 +1,9 @@
+#windows
+
+vim81/
+backup/
+Dev/
+swp/
+undo/
+cache/
+vimfiles/

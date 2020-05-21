@@ -38,6 +38,9 @@ if My_Is_Plugin_load('tagbar')
     let g:tagbar_autofocus = 1
     let g:tagbar_sort = 0
     let g:tagbar_compact = 1
+    if g:os_windows
+        let g:tagbar_ctags_bin="C:\\Gnu\\bin\\ctags"
+    endif
     " tag for coffee
     if executable('coffeetags')
       let g:tagbar_type_coffee = {

@@ -194,7 +194,9 @@ else:
 EOF
 endfunction
 
-call Venv_set_venv()
+if g:os_linux
+    call Venv_set_venv()
+endif
 
 " 这两行是用来保证置位compatible选项后脚本可以顺利执行而不出错
 let &cpo = s:save_cpo

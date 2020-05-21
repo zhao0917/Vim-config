@@ -31,6 +31,11 @@ function! My_Is_Plugin_load(plug)
 endfunction "}}}
 
 " set the runtime path to include Vundle and initialize
+" if g:os_windows
+"   设置plug插件从github下载时候的url地址形式
+    " let g:plug_url_format = 'https://github.com/%s.git'
+    " let g:plug_url_format = 'git@github.com:%s.git'
+" endif
 call plug#begin(s:PlugInstalldir)
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -40,7 +45,7 @@ call plug#begin(s:PlugInstalldir)
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plug 'ascenator/L9', {'name': 'newL9'}
-
+" let g:plug_url_format = 'git@github.com:%s.git'
 " All of your Plugs must be added before the following line
 "------------------
 " Code Completions

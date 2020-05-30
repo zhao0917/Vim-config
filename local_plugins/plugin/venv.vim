@@ -45,7 +45,9 @@ if !has('python3')
     finish
 endif
 
-py3 import vim, venv
+" TODO:  <30-05-20, yourname> python conda_venv如何import"
+py3 import vim,sys
+let s:script_basedir=expand("<sfile>:p:h")
 
 " 检查是否使用了conda
 function! s:Venv_is_conda_installed()
@@ -122,19 +124,50 @@ endif
 " 取得vim使用的python版本信息，前体是vim中已经可以使用python
 let s:vim_py_ver = s:Venv_get_vim_py_major_ver()
 
+function! s:is_conda_venv_activate()
+    if g:os_windows
+        let l:conda_exe = system('where conda')->split('\n')[0]->split('\\')
+        if l:conda_exe[-1] ==# 'conda.bat'
+           let l:conda_base=join(l:conda_exe[:-3],'\\')
+            if $path !~? conda_exe[:-2]->join('\\') && $path =~? conda_base
+                return v:true
+            else
+                return v:false
+            endif
+        else
+            return v:false
+        endif
+    elseif g:os_linux
+        let l:conda_exe = system('whereis -b conda')
+        " TODO:  <30-05-20, yourname> linux下判定conda是否激活的部分未完成
+    endif
+endfunction
 
 function! Venv_set_venv()
     " 设置python的sys.path 使得vim运行在正确的python环境下
 
     for [l:key,l:value] in items(s:conda_envs)
-        if l:key ==# "*current*" && len(l:value) > 0
-            let l:py_exe = 'python'
-        else
-            if g:os_linux
-                let l:py_exe = l:value . '/bin/python'
-            elseif g:os_windows
-                let l:py_exe = l:value . '\\python'
+        if s:is_conda_venv_activate()
+            " if l:key ==# "*current*" && len(l:value) > 0
+            if l:key ==# "*current*"
+                let l:py_exe = 'python'
+            else
+                if g:os_linux
+                    let l:py_exe = l:value . '/bin/python'
+                elseif g:os_windows
+                    let l:py_exe = l:value . '\\python'
+                endif
             endif
+        else
+            " conda环境未激活时候，当然不考虑当前环境的路径了
+            if l:key !=# "*current*"
+                if g:os_linux
+                    let l:py_exe = l:value . '/bin/python'
+                elseif g:os_windows
+                    let l:py_exe = l:value . '\\python'
+                endif
+            else
+                continue
         endif
 
         let l:conda_env_py_ver = s:Venv_get_env_py_major_ver(l:py_exe)
@@ -145,19 +178,11 @@ function! Venv_set_venv()
                 " 当前conda环境根vim 使用的python版本一致
                 return 0
             else
-                " 在sys.path中设置虚拟的环境变量
-                if len(s:conda_envs["*current*"]) == 0
-                    " windows下conda不随cmd启动，因为vim会频繁调用cmd，如果conda
-                    " 随cmd启动会导致速度很慢，vim 里面的plug等很多插件都会调用cmd
-                    if g:os_windows
-                        let l:is_replace = v:true
-                    elseif g:os_linux
-                        let l:is_replace = v:false
-                    endif
-                else
+                if s:is_conda_venv_activate()
                     let l:is_replace = v:true
+                else
+                    let l:is_replace = v:false
                 endif
-                
 
                 call s:Venv_set_python_venv(l:value, s:vim_py_ver, l:is_replace)
                 return 0
@@ -173,13 +198,15 @@ endfunction
 " 得到正确的版本，从而设置正确的路径
 function! s:Venv_set_python_venv(venv_base, py_ver, is_replace)
 python3<<EOF
-
 # 需要注意特殊字符转换时候是否会发生变化
 venv_base = str(vim.bindeval("a:venv_base"),'utf-8')
 py_ver = str(vim.bindeval("a:py_ver"),'utf-8')
+script_basedir = str(vim.bindeval("s:script_basedir"),'utf-8')
 is_replace = vim.bindeval("a:is_replace")
-venv.Venv_set_python_venv(venv_base, py_ver, is_replace)
-
+sys.path.append(script_basedir)
+import conda_venv
+conda_venv.Venv_set_python_venv(venv_base, py_ver, is_replace)
+sys.path.remove(script_basedir)
 EOF
 endfunction
 

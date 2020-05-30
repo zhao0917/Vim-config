@@ -271,15 +271,15 @@ function! My_set_vim_tmp(type, local_path)
     endif
 endfunction     "}}}
 
-if g:os_windows
+if has('nvim')
     "注意，路径最后一定要加'/'
     "比如'$VIM/backup/' 最后的'/'不能省略
     "也不能'$VIM/backup//'的形式，因为函数
     "会自动加上一个'/'在传入的参数最后
-    call My_set_vim_tmp('backup', '$VIM/backup/')
-    call My_set_vim_tmp('swp', '$VIM/swp/')
-    call My_set_vim_tmp('undo', '$VIM/undo/')
-elseif g:os_linux
+    call My_set_vim_tmp('backup', '$VIM/.backup/')
+    call My_set_vim_tmp('swp', '$VIM/.swp/')
+    call My_set_vim_tmp('undo', '$VIM/.undo/')
+else
     call My_set_vim_tmp('backup', '~/.vim/.backup/')
     call My_set_vim_tmp('swp', '~/.vim/.swp/')
     call My_set_vim_tmp('undo', '~/.vim/.undo/')

@@ -45,7 +45,7 @@ def Venv_set_python_venv(venv_base, py_ver, is_replace):
         elif os_platform == 'windows':
             i = 0
             while i < len(sys.path) and i < 10:
-                if 'python' in sys.path[i]:
+                if 'python' in sys.path[i].lower():
                     del sys.path[i]
                 else:
                     i += 1

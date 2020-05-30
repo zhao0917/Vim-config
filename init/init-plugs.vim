@@ -8,7 +8,7 @@ if g:os_windows
     if has('nvim')
         let s:PlugInstalldir='$VIM/pluged'
     else
-        let s:PlugInstalldir='$VIM/vimfiles/pluged'
+        let s:PlugInstalldir='$HOME/.vim/pluged'
     endif
 elseif g:os_linux
     if has('nvim')
@@ -77,7 +77,7 @@ call plug#begin(s:PlugInstalldir)
 " coc
 "-----------------
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
 
 
 " deoplete 是继neocomplete 后Shougo 又开发的补全插件，{{{

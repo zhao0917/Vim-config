@@ -169,6 +169,8 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 "{{{  coc.nvim
 if My_Is_Plugin_load('coc.nvim')
     " 插件设置
+    " Note you can add extension names to the g:coc_global_extensions variable,
+    " and coc will install the missing extensions for you on server start.
     call coc#add_extension('coc-json','coc-python','coc-jedi',
                 \ 'coc-clangd', 'coc-cmake', 'coc-snippets')
     " TextEdit might fail if hidden is not set.

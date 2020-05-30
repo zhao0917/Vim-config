@@ -15,6 +15,7 @@ if !exists("g:os_max")
     let g:os_mac=has('osx')
 endif
 
+
 if g:os_windows
     " init-vim 先于init-plugs-conf 加载，因为leader键在init-vim中设置,
     " 有很多插件的配置都需要leader键。而且在linux下也出现过配色不对的
@@ -27,20 +28,20 @@ if g:os_windows
         source $HOME/AppData/Local/nvim/init/init-plugs-conf.vim
         "手动下载的插件的安装目录
         "注意rtp+= 的等号后面不能有空格，否则会把空格也当作一个字符
-        set rtp+=$VIM/local_plugins/
+        set rtp+=$HOME/AppData/Local/nvim/local_plugins/
     else
-        source $VIMRUNTIME/vimrc_example.vim
-        source $VIMRUNTIME/mswin.vim
-        behave mswin
-        source $VIM/init/utils.vim
-        source $VIM/init/plug.vim
-        source $VIM/init/init-plugs.vim
-        source $VIM/init/init-vim.vim
-        source $VIM/init/init-plugs-conf.vim
+            source $VIMRUNTIME/vimrc_example.vim
+            source $VIMRUNTIME/mswin.vim
+            behave mswin
+            source $HOME/.vim/init/utils.vim
+            source $HOME/.vim/init/plug.vim
+            source $HOME/.vim/init/init-plugs.vim
+            source $HOME/.vim/init/init-vim.vim
+            source $HOME/.vim/init/init-plugs-conf.vim
 
-		"let $VIMFILES = $VIM.'/vimfiles'
+            "let $VIMFILES = $VIM.'/vimfiles'
 
-		set rtp+=$VIM/local_plugins/
+            set rtp+=$HOME/.vim/local_plugins/
     endif
 
 elseif g:os_linux

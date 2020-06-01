@@ -216,7 +216,8 @@ sys.path.remove(script_basedir)
 EOF
 endfunction
 
-if g:os_linux || g:os_windows
+"if g:os_linux || g:os_windows
+if g:os_linux
     call Venv_set_venv()
 endif
 

@@ -28,7 +28,22 @@ def Venv_set_python_venv(venv_base, py_ver, is_replace):
         # */lib/pythonx.x/site-packages
         venv_paths.append(os.path.join(venv_base, 'site-packages'))
     elif os_platform == 'windows':
+        conda_base_win = get_conda_base_dir_win(venv_base)
+        if conda_base_win != "":
+            venv_paths.append(os.path.join(conda_base_win, 'Library', 'bin'))
+            venv_paths.append(os.path.join(
+                conda_base_win, 'Library', 'mingw-w64', 'bin'))
+            conda_base_win = os.path.join(
+                conda_base_win, 'lib', 'site-packages')
+            venv_paths.append(conda_base_win)
+            venv_paths.append(os.path.join(conda_base_win, 'win32'))
+            venv_paths.append(os.path.join(conda_base_win, 'win32', 'lib'))
+            venv_paths.append(os.path.join(conda_base_win, 'pythonwin'))
+
         venv_paths.append(venv_base)
+
+        venv_paths.append(os.path.join(venv_base, 'bin'))
+        venv_paths.append(os.path.join(venv_base, 'DLLs'))
         #    */Library/bin
         venv_paths.append(os.path.join(venv_base, 'Library', 'bin'))
 
@@ -44,7 +59,7 @@ def Venv_set_python_venv(venv_base, py_ver, is_replace):
                 sys.path[i] = venv_paths[i]
         elif os_platform == 'windows':
             i = 0
-            while i < len(sys.path) and i < 10:
+            while i < len(sys.path):
                 if 'python' in sys.path[i].lower():
                     del sys.path[i]
                 else:
@@ -54,3 +69,16 @@ def Venv_set_python_venv(venv_base, py_ver, is_replace):
     else:
         for i in range(len(venv_paths)):
             sys.path.insert(0, venv_paths[i])
+
+
+def get_conda_base_dir_win(venv_base):
+    venv_base = venv_base.split("\\")
+    is_find = -1
+    for i in range(len(venv_base)):
+        if venv_base[i] == 'envs':
+            is_find = i
+            break
+    if is_find >= 0:
+        return "\\".join(venv_base[:is_find])
+    else:
+        return ""

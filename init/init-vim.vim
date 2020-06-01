@@ -333,9 +333,15 @@ cmap w!! %!sudo tee >/dev/null %
 
 " 快速打开配置文件快捷键 {{{
 if g:os_windows
-    nnoremap <silent> <leader>ep :e $VIM/init/init-plugs.vim<CR>
-    nnoremap <silent> <leader>ec :e $VIM/init/init-plugs-conf.vim<CR>
-    nnoremap <silent> <leader>ev :e $VIM/init/init-vim.vim<CR>
+    if $home !=# "" && $home !=# $userprofile
+        nnoremap <silent> <leader>ep :e $HOME/.vim/init/init-plugs.vim<CR>
+        nnoremap <silent> <leader>ec :e $HOME/.vim/init/init-plugs-conf.vim<CR>
+        nnoremap <silent> <leader>ev :e $HOME/.vim/init/init-vim.vim<CR>
+    else
+        nnoremap <silent> <leader>ep :e $USERPROFILE/AppData/Local/.vim/init/init-plugs.vim<CR>
+        nnoremap <silent> <leader>ec :e $USERPROFILE/AppData/Local/.vim/init/init-plugs-conf.vim<CR>
+        nnoremap <silent> <leader>ev :e $USERPROFILE/AppData/Local/.vim/init/init-vim.vim<CR>
+    endif
 elseif g:os_linux
     nnoremap <silent> <leader>ep :e $HOME/.vim/init/init-plugs.vim<CR>
     nnoremap <silent> <leader>ec :e $HOME/.vim/init/init-plugs-conf.vim<CR>

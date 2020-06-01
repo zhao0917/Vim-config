@@ -45,6 +45,12 @@ if !has('python3')
     finish
 endif
 
+if has('nvim')
+    " nvim不用这个插件设置，可以使用下面一行直接设置虚拟环境
+    " let g:python3_host_prog='D:/ProgramData/Anaconda3/envs/py38/python.exe'
+    finish
+endif
+
 " TODO:  <30-05-20, yourname> python conda_venv如何import"
 py3 import vim,sys
 let s:script_basedir=expand("<sfile>:p:h")

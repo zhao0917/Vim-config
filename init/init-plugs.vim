@@ -1,23 +1,6 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-"vim 插件安装位置设置{{{
-"注意不要包含vim默认的自动加载目录plugin autoload之类的文件名
-"定义插件安装目录的局部变量，以使用于windows linux 和vim nvim
-if g:os_windows
-    if has('nvim')
-        let s:PlugInstalldir='$VIM/pluged'
-    else
-        let s:PlugInstalldir='$HOME/.vim/pluged'
-    endif
-elseif g:os_linux
-    if has('nvim')
-        let s:PlugInstalldir='$HOME/nvim/pluged'
-    else
-        let s:PlugInstalldir='$HOME/.vim/pluged'
-    endif
-endif   "}}}
-
 " 一个简单的判断插件是否安装的函数. {{{
 function! My_Is_Plugin_load(plug)
 "   返回1 如果插件目录在rtp中，否则返回0
@@ -36,7 +19,8 @@ endfunction "}}}
     " let g:plug_url_format = 'https://github.com/%s.git'
     " let g:plug_url_format = 'git@github.com:%s.git'
 " endif
-call plug#begin(s:PlugInstalldir)
+
+call plug#begin(g:vim_plug_install_dir)
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo

@@ -65,4 +65,13 @@ elseif g:os_linux
     set runtimepath+=$HOME/.vim/local_plugins
 elseif g:os_mac
     " mac下配置不清楚，所以暂时不处理
+else
+    " msys2 下 上面几个都为0
+    source $HOME/.vim/init/utils.vim
+    let g:vim_plug_install_dir='$HOME/.vim/plugged'
+    source $HOME/.vim/init/plug.vim
+    source $HOME/.vim/init/init-plugs.vim
+    source $HOME/.vim/init/init-vim.vim
+    source $HOME/.vim/init/init-plugs-conf.vim
+    set rtp+=$HOME/.vim/local_plugins/
 endif
